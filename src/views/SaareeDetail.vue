@@ -85,8 +85,6 @@ export default {
       }
     },
     add_to_cart: function () {
-      //this.$alert('Added to cart');
-
       const cart = {
         user_id: this.loggedUser.id,
         prod_id: this.saaree.saaree_id,
@@ -95,17 +93,16 @@ export default {
 
         prod_price: this.saaree.price,
       };
-      console.log(cart);
+      //console.log(cart);
 
       axios
         .post("http://localhost:3000/api/addtocart", cart)
         .then((response) => {
           if (response.data.data) {
-            this.$alert("Added to cart");
-           
             this.GET_CART_PRODUCTS(this.loggedUser);
-           
-            this.$router.push("/cart");
+            this.$alert("Added to Cart").then(() => {
+              this.$router.replace("/cart");
+            });
           } else {
             this.$alert("Please Login");
 

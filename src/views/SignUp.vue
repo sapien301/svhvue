@@ -157,20 +157,7 @@ export default {
       } else {
         axios
           .post("http://localhost:3000/api/user", this.user)
-          .then(
-            (response) => (this.message = response.data.message),
-            //this.$router.push("/Login")
-            // (setInterval(() => {
-            //   this.$router.push("/Login")
-            // }, 3000)),
-            
-            
-            
-          );
-
-        
-
-        //console.log(this.user);
+          .then((response) => (this.message = response.data.message));
       }
     },
   },
@@ -178,7 +165,7 @@ export default {
 </script>
 
 <style scoped>
-.alert{
+.alert {
   text-align: center;
 }
 </style>
