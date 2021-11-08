@@ -11,7 +11,9 @@ export default new Vuex.Store({
   state: {
     loggedUser: [],
     cartProducts: [],
-   // cartValue: 0,
+    orderProducts: [],
+    cop: [],
+    isAdmin : 0,
   },
 
   getters: {
@@ -19,14 +21,18 @@ export default new Vuex.Store({
       return state.loggedUser
 
     },
+    
 
 
     cartProducts: state => {
       return state.cartProducts
     },
-    // cartValue: state => {
-    //   return state.cartValue
-    // },
+    orderProducts: state => {
+      return state.orderProducts
+    },
+    cop: state => {
+      return state.cop
+    }
   },
 
   mutations: {
@@ -37,6 +43,9 @@ export default new Vuex.Store({
     LOGOUT: (state) => {
       state.loggedUser = []
       state.cartProducts = []
+      state.orderProducts = []
+      state.cop = []
+      state.isAdmin = 0
     },
 
     GET_CART_PRODUCTS: (state, user) => {
@@ -46,13 +55,19 @@ export default new Vuex.Store({
 
         })
     },
-    // CART_VALUE(state) {
-      
-    //   state.cartProducts.forEach((product) => {
-    //     cartValue += product.prod_price;
-    //     return cartValue
-    //   });
-    // },
+    GET_ORDER_PRODUCTS: (state, user) => {
+      axios.post("http://localhost:3000/api/uorders", user)
+        .then((response) => {
+          state.orderProducts = response.data.data
+
+        })
+    },
+    GET_CURRENT_OP: (state, order_id) => {
+      axios.post("http://localhost:3000/api/cop", order_id).then((response) => {
+        state.cop = response.data.data
+      })
+    }
+
   },
   actions: {
 

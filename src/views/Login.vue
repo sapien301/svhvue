@@ -1,5 +1,6 @@
 <template>
   <div>
+    <Header />
     <h1 style="margin-left: 600px">Login</h1>
     <b-alert variant="danger" show>{{ message }}</b-alert>
     <b-container>
@@ -64,9 +65,14 @@
 import { mapMutations } from "vuex";
 import { required } from "vuelidate/lib/validators";
 import axios from "axios";
+import Header from "../components/Header.vue";
+
 
 export default {
   name: "Login",
+  components : {
+    Header
+  },
 
   data() {
     return {
@@ -103,6 +109,12 @@ export default {
           .then((response) => {
             this.message = response.data.message;
             if (response.data.data) {
+              if(response.data.data.isAdmin){
+                this.$store.state.isAdmin = 1
+                this.$router.push("/admin")
+                return
+              }
+              console.log(response.data.data);
               this.ADD_LOGGED_USER(response.data.data);
               this.GET_CART_PRODUCTS(response.data.data);
               this.$router.push("/");

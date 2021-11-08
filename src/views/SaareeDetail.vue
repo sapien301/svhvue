@@ -1,10 +1,11 @@
 <template>
   <div>
-    <b-container>
-      <h1>{{ this.loggedUser.name }}</h1>
-
+    <Header />
+    
+    <!-- {{this.related_products}} -->
+    <b-container style="margin-top: 20px">
       <b-row>
-        <b-col>
+        <div class="col-4">
           <b-carousel
             id="carousel-1"
             v-model="slide"
@@ -12,54 +13,83 @@
             controls
             indicators
             background="#ababab"
-            img-width="200px"
-            img-height="100px"
+            img-width="100px"
+            img-height="200px"
             style="text-shadow: 1px 1px 2px #333"
           >
-            <b-carousel-slide v-bind:img-src="saaree.image1"></b-carousel-slide>
-            <b-carousel-slide v-bind:img-src="saaree.image2"></b-carousel-slide>
-            <b-carousel-slide v-bind:img-src="saaree.image3"></b-carousel-slide>
+            <b-carousel-slide
+              v-bind:img-src="saaree.image1"
+              img-width="100px"
+              img-height="200px"
+            ></b-carousel-slide>
+            <b-carousel-slide
+              v-bind:img-src="saaree.image2"
+              img-width="100px"
+              img-height="600px"
+            ></b-carousel-slide>
+            <b-carousel-slide
+              v-bind:img-src="saaree.image3"
+              img-width="100px"
+              img-height="200px"
+            ></b-carousel-slide>
           </b-carousel>
-        </b-col>
+        </div>
 
         <b-col>
           <b-container>
-            {{ saaree }}
-            <br /><br /><br />
-            <h1>{{ saaree.saaree_name }}</h1>
-
-            <h1>Price : Rs {{ saaree.price }}</h1>
+            <br />
+            <h1 style="color: #009900">{{ saaree.saaree_name }}</h1>
+            <br />
+            <h3>Price : Rs {{ saaree.price }}</h3>
 
             <p>{{ saaree.description }}</p>
-
-            <br />
-            <br />
-            <b-row>
-              <b-col
-                ><b-button variant="outline-primary" v-on:click="add_to_cart()"
-                  >Add To Cart</b-button
-                >
-              </b-col>
-              <b-col><b-button variant="primary">Buy Now</b-button></b-col>
-            </b-row>
+            <h5><i>Addtional Details</i></h5>
+            <p><b>Material</b> : {{ saaree.material }}</p>
+              
+            <p><b>Wash</b> : {{ saaree.wash }}</p> 
+            <div v-if="saaree.stock > 1" >
+              <p style="color: green">In Stock</p>
+              <p>The product will be delivered within 3-7 days</p>
+              <b-row>
+                <b-col
+                  ><b-button
+                    variant="outline-primary"
+                    v-on:click="add_to_cart()"
+                    >Add To Cart</b-button
+                  >
+                </b-col>
+              </b-row>
+            </div>
+            <div v-else style="color: red">
+              <p>Out of Stock</p>
+            </div>
           </b-container>
         </b-col>
       </b-row>
     </b-container>
+  <div>
+    <footer-bar />
   </div>
+  </div>
+  
 </template>
 
 <script>
 import { mapState, mapMutations } from "vuex";
 import axios from "axios";
+import Header from "../components/Header.vue";
+import FooterBar from "../components/FooterBar.vue";
 
 export default {
-  components: {},
+  components: { Header,FooterBar },
   name: "SaareeDetail",
   data() {
     return {
       saaree: null,
       router: this.$route.params.saaree_id,
+      //related_products : null,
+
+
     };
   },
   mounted() {
@@ -80,6 +110,10 @@ export default {
         this.saaree = response.data.find(
           (saaree) => saaree.saaree_id === this.router
         );
+       // this.related_products = this.saaree.keywords
+        // let response2 = await this.$http.post(`http://localhost:3000/api/rProducts`,{ key :this.saaree.keywords});
+        // this.related_products = response2.data.data
+
       } catch (error) {
         console.log(error.response);
       }
@@ -111,6 +145,8 @@ export default {
         });
     },
   },
+
+  
 };
 </script>
 
